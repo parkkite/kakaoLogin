@@ -1,0 +1,13 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registation:
+          kakao:
+            client-id: 2e5f40b98dddd734c054ea8a9501e68f   # REST API 키
+            client-secret: qvW6dMOKJloIoS7Jl5iKBuTJLHNooziL
+            redirect-uri: "https://localhost:8080/login/oauth2/kakao"
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            scope: profile_nickname, profile_image, account_email, gender, age_range  # 동의 항목
+            client-name: Kakao
