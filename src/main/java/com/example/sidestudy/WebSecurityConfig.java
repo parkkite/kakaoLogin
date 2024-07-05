@@ -37,6 +37,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(config -> config.anyRequest().permitAll())
                 .oauth2Login(oauth2Configurer->oauth2Configurer
                         .successHandler(successHandler())
+                        .defaultSuccessUrl("/home")
                         .userInfoEndpoint(userInfoEndpoint ->userInfoEndpoint.userService(oAuth2UserService))
                 )
                 .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -48,8 +49,7 @@ public class WebSecurityConfig {
         return ((request, response, authentication) -> {
             DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
 
-            String id = defaultOAuth2User.getAttributes().get("properties").toString();
-
+            String id = defaultOAuth2User.getAttributes().get("nickname").toString();
             String body = """
                     {"id":"%s"}
                     """.formatted(id);

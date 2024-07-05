@@ -37,7 +37,9 @@ public class MainController {
         if (principal == null) {
             return "Principal is null";
         }
-        return "Welcome, " + principal.getAttribute("profile_nickname");
+        HashMap hm =principal.getAttribute("properties");
+
+        return "Welcome, " + hm.get("nickname").toString();
     }
 
     @GetMapping("/token")
