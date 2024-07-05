@@ -16,6 +16,7 @@ spring:
             redirect-uri: http://localhost:8080/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             client-name: kakao
+            scope: profile_nickname
   mvc:
     view:
       prefix: /templates/

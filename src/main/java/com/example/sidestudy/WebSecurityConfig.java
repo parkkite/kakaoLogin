@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +38,8 @@ public class WebSecurityConfig {
                 .oauth2Login(oauth2Configurer->oauth2Configurer
                         .successHandler(successHandler())
                         .userInfoEndpoint(userInfoEndpoint ->userInfoEndpoint.userService(oAuth2UserService))
-                );
+                )
+                .addFilterBefore(jwtRequestFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
@@ -46,7 +48,8 @@ public class WebSecurityConfig {
         return ((request, response, authentication) -> {
             DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
 
-            String id = defaultOAuth2User.getAttributes().get("id").toString();
+            String id = defaultOAuth2User.getAttributes().get("properties").toString();
+
             String body = """
                     {"id":"%s"}
                     """.formatted(id);
@@ -71,6 +74,10 @@ public class WebSecurityConfig {
         return NoOpPasswordEncoder.getInstance();
     }
 
+    @Bean
+    public JwtRequestFilter jwtRequestFilter() {
+        return new JwtRequestFilter();
+    }
 
 
 }
